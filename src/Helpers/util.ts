@@ -1,6 +1,6 @@
 import { AppError } from "@/Helpers/AppError";
 import messages from "@/Helpers/messages";
-import config from "@/configs/index";
+import { config } from "@/configs/index";
 import axios from "axios";
 import bcrypt from "bcrypt";
 import crypto from "crypto";

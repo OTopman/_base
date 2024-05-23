@@ -1,56 +1,56 @@
 /* eslint-disable require-jsdoc */
-import config from '@/configs/index'
-import { handleApiError } from '@/Helpers/util'
-import axios from 'axios'
+import { config } from "@/configs/index";
+import { handleApiError } from "@/Helpers/util";
+import axios from "axios";
 
-axios.defaults.baseURL = config.alpay.baseUrl
+axios.defaults.baseURL = config.alpay.baseUrl;
 
 // eslint-disable-next-line require-jsdoc
 export class AlPay {
-  private authHeader () {
+  private authHeader() {
     const publicKey =
-      config.environment === 'production'
+      config.environment === "production"
         ? config.alpay.livePublicKey
-        : config.alpay.testPublicKey
+        : config.alpay.testPublicKey;
     return {
-      Authorization: `Bearer ${publicKey}`
-    }
+      Authorization: `Bearer ${publicKey}`,
+    };
   }
 
-  async createWallet (name: string, email?: string, bvn?: string) {
+  async createWallet(name: string, email?: string, bvn?: string) {
     const res = await axios({
-      method: 'POST',
-      url: '/api/v1/wallets/create',
+      method: "POST",
+      url: "/api/v1/wallets/create",
       data: { name, email, bvn },
-      headers: this.authHeader()
-    }).catch(handleApiError)
-
-    return res!.data
-  }
-
-  async initializeBankTransfer (
-    fullName: string,
-    email: string,
-    amount: number,
-    bankName: 'OPAY' | 'PROVIDUS' = 'OPAY'
-  ) {
-    const res = await axios({
-      method: 'POST',
-      url: '/api/v2/payments/transfer',
-      data: { fullName, email, amount, bankName },
-      headers: this.authHeader()
-    }).catch(handleApiError)
+      headers: this.authHeader(),
+    }).catch(handleApiError);
 
     return res!.data;
   }
 
-  async initializeUssdPayment (email: string, amount: number, bankCode: string) {
+  async initializeBankTransfer(
+    fullName: string,
+    email: string,
+    amount: number,
+    bankName: "OPAY" | "PROVIDUS" = "OPAY"
+  ) {
     const res = await axios({
-      method: 'POST',
-      url: '/api/v2/payments/ussd',
+      method: "POST",
+      url: "/api/v2/payments/transfer",
+      data: { fullName, email, amount, bankName },
+      headers: this.authHeader(),
+    }).catch(handleApiError);
+
+    return res!.data;
+  }
+
+  async initializeUssdPayment(email: string, amount: number, bankCode: string) {
+    const res = await axios({
+      method: "POST",
+      url: "/api/v2/payments/ussd",
       data: { email, amount, bankCode },
-      headers: this.authHeader()
-    }).catch(handleApiError)
+      headers: this.authHeader(),
+    }).catch(handleApiError);
 
     return res!.data;
   }
@@ -60,76 +60,75 @@ export class AlPay {
    *
    * @returns An array of bank objects, each containing the bank's name, code, and logo URL.
    */
-  async fetchBanks () {
+  async fetchBanks() {
     const res = await axios({
-      method: 'GET',
-      url: '/api/v2/misc/banks',
-      headers: this.authHeader()
-    }).catch(handleApiError)
+      method: "GET",
+      url: "/api/v2/misc/banks",
+      headers: this.authHeader(),
+    }).catch(handleApiError);
 
-    return res!.data
+    return res!.data;
   }
 
-  async initializeCardPayment (
+  async initializeCardPayment(
     email: string,
     amount: number,
     method?: string,
-    name: string = 'NasoBet',
+    name: string = "NasoBet",
     callbackUrl: string = config.alpay.callbackUrl
   ) {
     const res = await axios({
-      method: 'POST',
-      url: '/api/v2/payments/card',
+      method: "POST",
+      url: "/api/v2/payments/card",
       data: {
         email,
         amount,
         method,
         fullName: name,
-        callbackUrl
+        callbackUrl,
       },
-      headers: this.authHeader()
-    }).catch(handleApiError)
-
-    return res!.data
-  }
-
-  async transferFund (accountNumber: string, bankCode: string, amount: number) {
-    const res = await axios({
-      method: 'POST',
-      url: '/api/v1/transactions/transfer',
-      data: { accountNumber, bankCode, amount },
-      headers: this.authHeader()
-    }).catch(handleApiError)
-
-    return res!.data
-  }
-
-  async fetchTransaction (transactionReference: string) {
-    const res = await axios({
-      method: 'GET',
-      url: `/api/v1/transactions/${transactionReference}`,
-      headers: this.authHeader()
-    }).catch(handleApiError)
-    return res!.data
-  }
-
-  async fetchTransactions () {
-    const res = await axios({
-      method: 'GET',
-      url: '/api/v1/transactions',
-      headers: this.authHeader()
-    }).catch(handleApiError)
-    return res!.data
-  }
-
-  async verifyAccount (accountNumber: string, bankCode: string) {
-    const res = await axios({
-      method: 'POST',
-      url: '/api/v2/misc/verify-account',
       headers: this.authHeader(),
-      data: { accountNumber, bankCode }
-    }).catch(handleApiError)
-    return res!.data
+    }).catch(handleApiError);
+
+    return res!.data;
+  }
+
+  async transferFund(accountNumber: string, bankCode: string, amount: number) {
+    const res = await axios({
+      method: "POST",
+      url: "/api/v1/transactions/transfer",
+      data: { accountNumber, bankCode, amount },
+      headers: this.authHeader(),
+    }).catch(handleApiError);
+
+    return res!.data;
+  }
+
+  async fetchTransaction(transactionReference: string) {
+    const res = await axios({
+      method: "GET",
+      url: `/api/v1/transactions/${transactionReference}`,
+      headers: this.authHeader(),
+    }).catch(handleApiError);
+    return res!.data;
+  }
+
+  async fetchTransactions() {
+    const res = await axios({
+      method: "GET",
+      url: "/api/v1/transactions",
+      headers: this.authHeader(),
+    }).catch(handleApiError);
+    return res!.data;
+  }
+
+  async verifyAccount(accountNumber: string, bankCode: string) {
+    const res = await axios({
+      method: "POST",
+      url: "/api/v2/misc/verify-account",
+      headers: this.authHeader(),
+      data: { accountNumber, bankCode },
+    }).catch(handleApiError);
+    return res!.data;
   }
 }
-

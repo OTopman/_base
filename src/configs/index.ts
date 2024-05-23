@@ -1,18 +1,6 @@
-import dotenvExtended from "dotenv-extended";
-import dotenvParseVariables from "dotenv-parse-variables";
+import { Environment, LogLevel } from "@/configs/type";
 
-import { type Environment, type LogLevel } from "./type";
-
-const env = dotenvExtended.load({
-  path: ".env",
-  defaults: "./envs/defaults.env",
-  schema: "./envs/schema.env",
-  includeProcessEnv: true,
-  silent: false,
-  errorOnMissing: true,
-  errorOnExtra: true,
-});
-const parsedEnv = dotenvParseVariables(env);
+const parsedEnv = process.env;
 
 interface Config {
   privateKeyPath: string;
@@ -24,6 +12,7 @@ interface Config {
   redisUrl: string;
   app: {
     frontendUrl: string;
+    name: string;
   };
 
   mail: {
@@ -69,9 +58,10 @@ interface Config {
   applogger: boolean;
 }
 
-const config: Config = {
+export const config: Config = {
   app: {
     frontendUrl: parsedEnv.FRONTEND_URL as string,
+    name: parsedEnv.APP_NAME as string | "default",
   },
 
   basePath: "",
@@ -79,7 +69,7 @@ const config: Config = {
   privateKeyPassphrase: parsedEnv.PRIVATE_KEY_PASSPHRASE as string,
   publicKeyPath: parsedEnv.PUBLIC_KEY_FILE as string,
 
-  localCacheTtl: parsedEnv.LOCAL_CACHE_TTL as number,
+  localCacheTtl: parsedEnv.LOCAL_CACHE_TTL as any,
   redisUrl: parsedEnv.REDIS_URL as string,
 
   google: {
@@ -90,7 +80,7 @@ const config: Config = {
   mail: {
     username: parsedEnv.EMAIL_USERNAME as string,
     password: parsedEnv.EMAIL_PASSWORD as string,
-    port: parsedEnv.EMAIL_PORT as number,
+    port: parsedEnv.EMAIL_PORT as any,
     host: parsedEnv.EMAIL_HOST as string,
   },
 
@@ -111,23 +101,20 @@ const config: Config = {
   mysql: {
     username: parsedEnv.DATABASE_USER as string,
     password: parsedEnv.DATABASE_PASSWORD as string,
-    port: parsedEnv.DATABASE_PORT as number,
+    port: parsedEnv.DATABASE_PORT as any,
     host: parsedEnv.DATABASE_HOST as string,
     database: parsedEnv.DATABASE_NAME as string,
   },
 
   morgan: {
-    logger: parsedEnv.MORGAN_LOGGER as boolean,
-    body: parsedEnv.MORGAN_BODY_LOGGER as boolean,
+    logger: parsedEnv.MORGAN_LOGGER as any,
+    body: parsedEnv.MORGAN_BODY_LOGGER as any,
   },
 
   loglevel: parsedEnv.LOGGER_LEVEL as LogLevel,
-  applogger: parsedEnv.APP_LOGGER as boolean,
+  applogger: parsedEnv.APP_LOGGER as any,
   environment: parsedEnv.NODE_ENV as Environment,
 };
 
-export default config;
 export * as constants from "@/configs/constants";
-export * as enums from "@/configs/enums";
-export * as interfaces from "@/configs/interface";
-export * as type from "@/configs/type";
+export * as types from "@/configs/type";

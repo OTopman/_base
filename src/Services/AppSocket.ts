@@ -15,13 +15,7 @@ export class AppSocket {
     }
     AppSocket.server = new io.Server(server, {
       cors: {
-        origin:
-          "*" /* allowedOrigins */ /* (origin, cb) => {          if (origin && allowedOrigins.includes(origin)) {
-            cb(null, true);
-          } else {
-            cb(new AppError("Not allowed by CORS.", 400));
-          }
-        }, */,
+        origin: "*",
         exposedHeaders,
         methods: ["GET", "POST", "DELETE", "PUT"],
       },

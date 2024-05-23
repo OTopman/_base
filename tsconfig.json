@@ -27,16 +27,4 @@
 		"verbose": true
 	},
 	"compileOnSave": true,
-	// "files": ["./countries.json", "./fcm.json"],
-	"ts-node": {
-		"require": ["tsconfig-paths/register"]
-		/* "compilerOptions": {
-			"module": "CommonJS",
-			"baseUrl": "./",
-			"paths": {
-				"@/*": ["./src/*", "./build/*"],
-				"@prisma/client": ["./prisma/client/generated"]
-			}
-		} */
-	}
 }

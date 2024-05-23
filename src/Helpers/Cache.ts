@@ -1,4 +1,4 @@
-import config from '@/configs/index'
+import { config } from '@/configs/index'
 import logger from '@/Helpers/logger'
 import type * as r from 'redis'
 
